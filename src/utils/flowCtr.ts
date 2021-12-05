@@ -1,32 +1,35 @@
 
-export type UploadAjaxFunc = (chunk: File, index: number, chunks: File[]) => Promise<unknown>
+export type UploadAjaxFunc<T> = (chunk:T, index: number, chunks: readonly T[] ) => Promise<unknown>
 
-export type FlowCtr = (ajax: UploadAjaxFunc, chunks: File[], start: number) => {
-  stop: () => void
-}
+export type flowCtr<T> = (ajax: UploadAjaxFunc<T>, chunks: readonly T[], start: number) => {
+  stop: () => void,
+  continue: () => ReturnType<flowCtr<T>>
+};
 
-const flowCtr: FlowCtr = (uploadChunkAjax, chunks, start = 0) => {
+
+/** upload chunks flow control function */
+function flowCtr<M>(uploadChunkAjax:UploadAjaxFunc<M>, chunks: readonly M[], start = 0): ReturnType<flowCtr<M>>{
   const stop = { val: false };
-  const copyChunks: File[] = chunks.slice(start);
+  const copyChunks: M[] = chunks.slice(start);
   let i = 0;
   (async function () {
     while (copyChunks.length) {
       const res = await uploadChunkAjax(copyChunks.shift(), i, chunks)
-      if(res !== true){
+      if (res !== true) {
         console.error('error')
         break
       }
-      if(res === true && stop.val === false){
-        console.warn('upload:' , i)
+      if (res === true && stop.val === false) {
+        console.warn('upload:', i)
         i++
         continue
       }
-      if(stop.val === true){
+      if (stop.val === true) {
         console.warn('stop')
         break
       }
     }
-    if(!copyChunks.length) console.warn('finish')
+    if (!copyChunks.length) console.warn('finish')
   })()
   return {
     stop: () => stop.val = true,
