@@ -10,6 +10,9 @@
         "charset": "utf-8",
         "esModuleInterop": true,
         "preserveConstEnums": false,
-        "sourceMap": false
-    }
+        "sourceMap": false,
+        "module": "ESNext",
+        "pretty": true,
+        "lib": [ "WebWorker", "DOM", "ESNext" ]
+      },
 }
