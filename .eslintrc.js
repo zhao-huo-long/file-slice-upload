@@ -11,5 +11,8 @@ module.exports = {
   "parserOptions": { "project": ["./tsconfig.json"] },
   "plugins": [
     "@typescript-eslint"
-  ]
+  ],
+  "rules":{
+    "quotes": ["error", "single"]
+  }
 };
