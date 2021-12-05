@@ -3,6 +3,8 @@
   "description": "file-slice-upload",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "types": "dist/index.dt.ts",
+  "type": "module",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
@@ -26,7 +28,10 @@
     "upload",
     "分片上传",
     "大文件",
-    "hooks"
+    "big-file",
+    "slice-upload",
+    "文件上传",
+    "file-chunk"
   ],
   "author": "https://github.com/zhuo-huo-long",
   "license": "MIT",
