@@ -4,14 +4,14 @@ import sliceFile from './utils/sliceFile'
 import type { Unit } from './utils/strToByte'
 import strToByte from './utils/strToByte'
 import flowCtr from './utils/flowCtr'
-import type {FlowCtr} from './utils/flowCtr'
+import type { FlowCtr } from './utils/flowCtr'
 import { mAssertType } from './utils/miniAssert'
 
 type EventType = {
   start: () => void;
   finish: () => void;
   continue: () => void;
-  progress: (payload: {done: number, all: number}) => void;
+  progress: (payload: { done: number, all: number }) => void;
   error: () => void;
   stop: () => void;
 }
@@ -32,7 +32,7 @@ class FileUpload<T extends number>{
   /** file */
   private file_: File
 
-  constructor(private readonly parallel: T = 1 as T) {}
+  constructor(private readonly parallel: T = 1 as T) { }
 
   /** event listen */
   on<M extends keyof EventType>(eventName: M, handler: EventType[M]) {
@@ -45,18 +45,18 @@ class FileUpload<T extends number>{
   public file(file: File, chunkSizeStr: Unit, parallel: T) {
     mAssertType(file, File, 'file expecte File type')
     mAssertType(chunkSizeStr, String, 'chunkSizeStr expecte String type likes `"2MB"`')
-    mAssertType(parallel , Number, 'parallel expecte Number type likes `2` `1`')
+    mAssertType(parallel, Number, 'parallel expecte Number type likes `2` `1`')
     this.file_ = file
     const chunkSize = strToByte(chunkSizeStr)
     const chunkArr = sliceFile(file, chunkSize)
-    if([0, 1, undefined].includes(parallel)){
+    if ([0, 1, undefined].includes(parallel)) {
       this.chunkArr = chunkArr as PARALLEL<T>
       return this
     }
     let i = 0
     const chunkArrArr = [] as File[][]
-    while(chunkArr.slice(i * chunkSize, i * chunkSize  + chunkSize)){
-      chunkArrArr.push(chunkArr.slice(i * chunkSize, i * chunkSize  + chunkSize))
+    while (chunkArr.slice(i * chunkSize, i * chunkSize + chunkSize)) {
+      chunkArrArr.push(chunkArr.slice(i * chunkSize, i * chunkSize + chunkSize))
       i++
     }
     this.chunkArr = chunkArrArr as PARALLEL<T>
@@ -64,25 +64,25 @@ class FileUpload<T extends number>{
   }
 
   /** set upload file-chunk function, function return true will upload next chunk */
-  public uploadFunc(ajax: UploadAjaxFunc<ChunkType<T>>){
+  public uploadFunc(ajax: UploadAjaxFunc<ChunkType<T>>) {
     mAssertType(ajax, Function, 'expecte Function')
     this.uploadFunc_ = ajax
     return this
   }
 
   /** start upload */
-  public start(){
+  public start() {
     mAssertType(this.uploadFunc_, Function, 'please set upload function use .uploadFunc()')
     mAssertType(this.file_, File, 'please set upload file use .file(file)')
     this.flow?.stop?.()
     this.event.emit('start', 'start')
     this.flow = flowCtr<ChunkType<T>>
-      (this.uploadFunc_, this.chunkArr, this.event, 0 )
+      (this.uploadFunc_, this.chunkArr, this.event, 0)
     return this
   }
 
   /** stop upload */
-  public stop(){
+  public stop() {
     this.event.emit('stop', 'stop')
     this.flow?.stop?.()
     return this
@@ -91,7 +91,7 @@ class FileUpload<T extends number>{
   /** continue upload */
   public continue() {
     this.event.emit('continue', 'continue')
-    if(this.flow?.continue){
+    if (this.flow?.continue) {
       this.flow = this.flow?.continue?.()
     }
     return this
