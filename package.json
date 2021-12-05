@@ -33,5 +33,7 @@
   "bugs": {
     "url": "https://github.com/zhuo-huo-long/file-slice-upload/issues"
   },
-  "homepage": "https://github.com/zhuo-huo-long/file-slice-upload#readme"
+  "homepage": "https://github.com/zhuo-huo-long/file-slice-upload#readme",
+  "dependencies": {
+  }
 }
