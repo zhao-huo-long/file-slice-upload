@@ -6,7 +6,7 @@ const buildChunkName: BuildNameFunt = (file, index) => {
 }
 
 /** file slice to chunks */
-const sliceFile = (file: File, chunkSize?: 0, chunkName?: BuildNameFunt): File[] => {
+const sliceFile = (file: File, chunkSize = 0, chunkName?: BuildNameFunt): File[] => {
   const chunkNums = Math.ceil(file.size / chunkSize)
   const chunksArray = new Array(chunkNums) as File[]
   let i = 0;

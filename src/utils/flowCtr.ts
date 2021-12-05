@@ -1,40 +1,57 @@
+import MiniEventEmit from './miniEventEmit'
 
-export type UploadAjaxFunc<T> = (chunk:T, index: number, chunks: readonly T[] ) => Promise<unknown>
+export type UploadAjaxFunc<T> = (chunk: T, index: number, chunks: readonly T[]) => Promise<unknown>
 
-export type flowCtr<T> = (ajax: UploadAjaxFunc<T>, chunks: readonly T[], start: number) => {
-  stop: () => void,
-  continue: () => ReturnType<flowCtr<T>>
-};
+type flowCtr<T> = (ajax: UploadAjaxFunc<T>, chunks: T[], event: MiniEventEmit, start: number,) => {
+  stop?: () => boolean;
+  continue?: () => ReturnType<flowCtr<T>>
+}
+
+export type FlowCtr<T> = ReturnType<flowCtr<T>>
 
 
 /** upload chunks flow control function */
-function flowCtr<M>(uploadChunkAjax:UploadAjaxFunc<M>, chunks: readonly M[], start = 0): ReturnType<flowCtr<M>>{
-  const stop = { val: false };
+function flowCtr<M>(
+  uploadChunkAjax: UploadAjaxFunc<M>,
+  chunks: M[] = [],
+  event: MiniEventEmit = new MiniEventEmit(),
+  start = 0,
+): ReturnType<flowCtr<M>> {
+  const stopFlag = { val: false };
   const copyChunks: M[] = chunks.slice(start);
   let i = 0;
+  if (!copyChunks.length) return {};
   (async function () {
     while (copyChunks.length) {
-      const res = await uploadChunkAjax(copyChunks.shift(), i, chunks)
+      const chunk = copyChunks.shift()
+      const res = await uploadChunkAjax(chunk, i, chunks)
       if (res !== true) {
+        event.emit('error', 'error')
         console.error('error')
         break
       }
-      if (res === true && stop.val === false) {
-        console.warn('upload:', i)
+      if (res === true && stopFlag.val === false) {
+        event.emit('progress', { done: i + 1, all: chunks.length })
+        event.emit('uploaded', { chunk, index: i, chunks })
         i++
         continue
       }
-      if (stop.val === true) {
+      if (stopFlag.val === true) {
         console.warn('stop')
+        event.emit('stop', 'stop')
         break
       }
     }
     if (!copyChunks.length) console.warn('finish')
   })()
   return {
-    stop: () => stop.val = true,
-    continue: () => flowCtr(uploadChunkAjax, chunks, i)
+    stop: () => stopFlag.val = true,
+    continue: () => {
+      stopFlag.val = true
+      return flowCtr<M>(uploadChunkAjax, chunks, event, i)
+    }
   }
+
 }
 
 
