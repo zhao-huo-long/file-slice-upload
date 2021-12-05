@@ -9,7 +9,7 @@
         "outDir": "dist",
         "charset": "utf-8",
         "esModuleInterop": true,
-        "preserveConstEnums": true,
-        "sourceMap": true
+        "preserveConstEnums": false,
+        "sourceMap": false
     }
 }
