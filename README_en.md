@@ -22,6 +22,7 @@ fileUpload()
   /* return is true will upload next chunk */
   return success
 })
+.start()
 ```
 
 ## Feature
