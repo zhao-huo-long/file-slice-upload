@@ -32,7 +32,7 @@ class FileUpload<T extends number>{
   /** file */
   private file_: File
 
-  constructor(private readonly parallel: T = 1 as T) { }
+  constructor(private readonly parallel: T = 1 as T) {}
 
   /** event listen */
   on<M extends keyof EventType>(eventName: M, handler: EventType[M]) {
@@ -42,14 +42,13 @@ class FileUpload<T extends number>{
   }
 
   /** set upload file */
-  public file(file: File, chunkSizeStr: Unit, parallel: T) {
+  public file(file: File, chunkSizeStr: Unit,) {
     mAssertType(file, File, 'file expecte File type')
     mAssertType(chunkSizeStr, String, 'chunkSizeStr expecte String type likes `"2MB"`')
-    mAssertType(parallel, Number, 'parallel expecte Number type likes `2` `1`')
     this.file_ = file
     const chunkSize = strToByte(chunkSizeStr)
     const chunkArr = sliceFile(file, chunkSize)
-    if ([0, 1, undefined].includes(parallel)) {
+    if ([0, 1, undefined].includes(this.parallel)) {
       this.chunkArr = chunkArr as PARALLEL<T>
       return this
     }
