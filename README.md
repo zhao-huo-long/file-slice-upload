@@ -24,6 +24,7 @@ fileUpload()
   /* 返回 true 将会上传下一个文件碎片 */
   return success
 })
+.start()
 ```
 
 ## 特点
