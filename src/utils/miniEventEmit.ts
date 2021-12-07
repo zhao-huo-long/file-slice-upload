@@ -33,7 +33,7 @@ class MiniEventEmit {
   }
 
   public once(eventName: string, handler: anyHandler){
-    const wrapper = (...payload) => {
+    const wrapper = (...payload: unknown[]) => {
       handler(...payload)
       this.off(eventName, wrapper)
     }

@@ -1,16 +1,16 @@
 
 const unitMap = {
-  'byte': 1,
-  'k': 1024,
-  'kb': 1024,
-  'm': 1024 * 1024,
-  'mb': 1024 * 1024
+  'BYTE': 1,
+  'K': 1024,
+  'KB': 1024,
+  'M': 1024 * 1024,
+  'MB': 1024 * 1024
 } as const
 
 export type Unit = `${number}${ Uppercase<keyof typeof unitMap> }` | `${number}${ keyof typeof unitMap }`
 
 export default (sizeStr: Unit) => {
-  const unitStr = Object.keys(unitMap).find(b => new RegExp(`${b.toUpperCase()}$`, sizeStr.toUpperCase())) as Unit
+  const unitStr = Object.keys(unitMap).find(b => new RegExp(`${b.toUpperCase()}$`, sizeStr.toUpperCase())) as keyof typeof unitMap
   if(unitStr) return
   const unit = unitMap[unitStr]
   const [val] =  sizeStr.split(unitStr)
