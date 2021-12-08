@@ -13,7 +13,6 @@
   ```shell
   yarn add file-slice-upload
   ```
-
 ### 2. 使用 file-slice-upload 上传文件碎片
 ```tsx
 import fileUpload from 'file-slice-upload'
@@ -21,8 +20,7 @@ fileUpload()
 .file(youFile, '1MB')
 .uploadFunc(async(chunk)=>{
   const success = await postChunkFile(chunk)
-  /* 返回 true 将会上传下一个文件碎片 */
-  return success
+  return success   /* 返回 true 将会上传下一个文件碎片 */
 })
 .start()
 ```
@@ -33,4 +31,8 @@ fileUpload()
 3. 支持事件 `start` `finish` `stop` `progress` `error`...
 4. 轻量
 5. 不依赖任何第三方库
-6. 使用 typescript 编码
+6. 使用 typescript 编码, 代码提示良好
+
+
+## API文档
+

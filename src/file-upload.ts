@@ -12,6 +12,7 @@ type EventType = {
   finish: () => void;
   continue: () => void;
   progress: (payload: { done: number, all: number }) => void;
+  'chunk-uploaded': (payload: { chunk: File, index: number, chunks: File[] }) => void;
   error: () => void;
   stop: () => void;
 }
@@ -32,7 +33,7 @@ class FileUpload<T extends number>{
   /** file */
   private file_: File
 
-  constructor(private readonly parallel: T = 1 as T) {}
+  constructor(private readonly parallel: T = 1 as T) { }
 
   /** event listen */
   on<M extends keyof EventType>(eventName: M, handler: EventType[M]) {

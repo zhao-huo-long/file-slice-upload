@@ -32,7 +32,7 @@ function flowCtr<M>(
       }
       if (res === true && stopFlag.val === false) {
         event.emit('progress', { done: i + 1, all: chunks.length })
-        event.emit('uploaded', { chunk, index: i, chunks })
+        event.emit('chunk-uploaded', { chunk, index: i, chunks })
         i++
         continue
       }
