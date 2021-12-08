@@ -90,10 +90,10 @@ class FileUpload<T extends number>{
 
   /** continue upload */
   public continue() {
-    this.event.emit('continue', 'continue')
     if (this.flow?.continue) {
-      this.flow = this.flow?.continue?.()
+      this.flow = this.flow.continue()
     }
+    this.event.emit('continue', 'continue')
     return this
   }
 

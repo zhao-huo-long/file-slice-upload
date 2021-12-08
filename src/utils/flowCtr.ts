@@ -3,7 +3,7 @@ import MiniEventEmit from './miniEventEmit'
 export type UploadAjaxFunc<T> = (chunk: T, index: number, chunks: readonly T[]) => Promise<unknown>
 
 type flowCtr<T> = (ajax: UploadAjaxFunc<T>, chunks: T[], event: MiniEventEmit, start: number,) => {
-  stop?: () => boolean;
+  stop?: () => void
   continue?: () => ReturnType<flowCtr<T>>
 }
 
@@ -19,7 +19,7 @@ function flowCtr<M>(
 ): ReturnType<flowCtr<M>> {
   const stopFlag = { val: false };
   const copyChunks: M[] = chunks.slice(start);
-  let i = 0;
+  let i = start;
   if (!copyChunks.length) return {};
   (async function () {
     while (copyChunks.length) {
@@ -48,7 +48,9 @@ function flowCtr<M>(
     }
   })()
   return {
-    stop: () => stopFlag.val = true,
+    stop: () => {
+      stopFlag.val = true
+    },
     continue: () => {
       stopFlag.val = true
       return flowCtr<M>(uploadChunkAjax, chunks, event, i)

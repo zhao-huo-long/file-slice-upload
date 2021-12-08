@@ -18,10 +18,11 @@
   },
   "scripts": {
     "lint": "eslint src/**/* ",
+    "test": "echo skip test",
     "build": "npm run build-common && npm run build-es && npm run build-script",
     "build-common": "tsc",
     "build-es": "tsc --project tsconfig.es.json",
-    "build-script": "cross-env  NODE_ENV=production  webpack",
+    "build-script": "cross-env NODE_ENV=production  webpack",
     "build-script-dev": "cross-env  NODE_ENV=development  webpack",
     "prepare": "husky install"
   },
