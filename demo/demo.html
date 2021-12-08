@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>file-slice-upload-demo</title>
+  <script src="../scripts/file-slice-upload.js"></script>
+</head>
+<body>
+  <div id="demo">
+    <input id="fileBox" type="file">
+    <button id="uploadBtn">UPLOAD</button>
+    <button id="stopBtn">STOP</button>
+    <button id="conBtn">CONTINUE</button>
+    <span>chunk-size: 1M</span>
+    <div id="content"></div>
+  </div>
+</body>
+<script>
+  const uploadBtn = document.querySelector("#uploadBtn")
+  const fileBox = document.querySelector("#fileBox")
+  const content = document.querySelector("#content")
+  const stopBtn = document.querySelector("#stopBtn")
+  const conBtn = document.querySelector("#conBtn")
+  function mockPostFile(file){
+    return new Promise(function(res){
+      setTimeout(function(){
+          res(file)
+      }, 1000)
+    })
+  }
+  function uploadChunkFunc(chunk){
+    return mockPostFile(chunk).then(res => !!res)
+  }
+  const fileupload = fileSliceUpload()
+  .uploadFunc(uploadChunkFunc)
+  .on('finish', (e) => {
+    alert('all chunks upload finish')
+  })
+  .on('chunk-uploaded', ({chunk}) => {
+    console.log(chunk)
+    const d = document.createElement('div')
+    d.innerHTML = `chunk-file-name:${chunk.name}`
+    content.appendChild( d )
+  })
+  uploadBtn.addEventListener('click', function(){
+    const [file] = fileBox.files
+    console.log(file)
+    fileupload.file(file, '1M').
+    start()
+  })
+  stopBtn.addEventListener('click', function(){
+    fileupload.stop()
+  })
+  conBtn.addEventListener('click', function(){
+    fileupload.continue()
+  })
+</script>
+</html>

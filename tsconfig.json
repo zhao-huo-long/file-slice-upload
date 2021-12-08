@@ -1,0 +1,20 @@
+{
+  "include": [
+    "src/**/*"
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "outDir": "lib",
+    "charset": "utf-8",
+    "esModuleInterop": true,
+    "preserveConstEnums": false,
+    "sourceMap": false,
+    "pretty": true,
+    "lib": [
+      "DOM",
+      "ESNext"
+    ]
+  }
+}
