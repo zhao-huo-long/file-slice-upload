@@ -28,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zhuo-huo-long/file-slice-upload.git"
+    "url": "git+https://github.com/zhao-huo-long/file-slice-upload.git"
   },
   "keywords": [
     "file",
@@ -41,11 +41,11 @@
     "文件上传",
     "file-chunk"
   ],
-  "author": "https://github.com/zhuo-huo-long",
+  "author": "https://github.com/zhao-huo-long",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zhuo-huo-long/file-slice-upload/issues"
+    "url": "https://github.com/zhao-huo-long/file-slice-upload/issues"
   },
-  "homepage": "https://github.com/zhuo-huo-long/file-slice-upload#readme",
+  "homepage": "https://github.com/zhao-huo-long/file-slice-upload#readme",
   "dependencies": {}
 }
