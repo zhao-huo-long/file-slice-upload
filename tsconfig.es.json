@@ -6,12 +6,13 @@
     "allowJs": true,
     "declaration": true,
     "emitDeclarationOnly": false,
-    "outDir": "lib",
+    "outDir": "es",
     "charset": "utf-8",
     "esModuleInterop": true,
     "preserveConstEnums": false,
     "sourceMap": false,
     "pretty": true,
+    "module": "ES6",
     "lib": [
       "DOM",
       "ESNext"

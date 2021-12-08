@@ -10,8 +10,10 @@ const unitMap = {
 export type Unit = `${number}${ Uppercase<keyof typeof unitMap> }` | `${number}${ keyof typeof unitMap }`
 
 export default (sizeStr: Unit) => {
-  const unitStr = Object.keys(unitMap).find(b => new RegExp(`${b.toUpperCase()}$`, sizeStr.toUpperCase())) as keyof typeof unitMap
-  if(unitStr) return
+  const unitStr = Object.keys(unitMap).
+  find(b => new RegExp(`${b.toUpperCase()}$`)
+  .test(sizeStr.toUpperCase())) as keyof typeof unitMap
+  if(!unitStr) return 0
   const unit = unitMap[unitStr]
   const [val] =  sizeStr.split(unitStr)
   if(isNaN(Number(val))) throw new Error('must be number string')

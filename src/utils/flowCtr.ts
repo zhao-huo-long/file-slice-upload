@@ -42,7 +42,10 @@ function flowCtr<M>(
         break
       }
     }
-    if (!copyChunks.length) console.warn('finish')
+    if (!copyChunks.length) {
+      console.warn('finish')
+      event.emit('finish', 'finish')
+    }
   })()
   return {
     stop: () => stopFlag.val = true,
