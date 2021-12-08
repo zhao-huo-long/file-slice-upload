@@ -1,6 +1,6 @@
 # 📄 File-Slice-Upload
 
-[english](./README_en.md)
+[English](./README_en.md)
 
 ## 快速开始
 
@@ -77,3 +77,7 @@ fileUpload()
 | error | 上传失败 | `() => void` |
 
 6. `fileUpload.off(eventName, cb)` => `this` 取消事件注册
+
+### demo
+
+1. [live-demo](./demo/demo.html)
