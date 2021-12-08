@@ -80,4 +80,4 @@ fileUpload()
 
 ### demo
 
-1. [live-demo](./demo/demo.html)
+1. [live-demo](https://zhao-huo-long.github.io/file-slice-upload/demo/demo.html)
