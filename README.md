@@ -75,3 +75,5 @@ fileUpload()
 | progress | 上传进度 | `({done: number, all: number}) => void` |
 | chunk-uploaded | 分片上传成功 |`({chunk: File, index: number, chunks: File[] }) => void `|
 | error | 上传失败 | `() => void` |
+
+6. `fileUpload.off(eventName, cb)` => `this` 取消事件注册

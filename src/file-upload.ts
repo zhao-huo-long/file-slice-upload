@@ -42,6 +42,13 @@ class FileUpload<T extends number>{
     return this
   }
 
+  /** event close listen */
+  off<M extends keyof EventType>(eventName: M, handler: EventType[M]) {
+    mAssertType(handler, Function, 'handler expecte function type')
+    this.event.off(eventName, handler)
+    return this
+  }
+
   /** set upload file */
   public file(file: File, chunkSizeStr: Unit,) {
     mAssertType(file, File, 'file expecte File type')

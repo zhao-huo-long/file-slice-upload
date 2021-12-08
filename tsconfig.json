@@ -1,6 +1,6 @@
 {
   "include": [
-    "src/**/*",
+    "src/**/*"
   ],
   "compilerOptions": {
     "allowJs": true,
@@ -16,5 +16,5 @@
       "DOM",
       "ESNext"
     ]
-  },
+  }
 }
