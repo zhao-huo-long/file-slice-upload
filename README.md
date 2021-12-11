@@ -1,83 +1,86 @@
 # 📄 File-Slice-Upload
 
-[English](./README_en.md)
+[Chinese](./README_zh.md)
 
-## 快速开始
-
-### 1. 安装
-  * 使用 npm 安装
+## Quick Start
+1. Install
+  * Use npm install
   ```shell
   npm install file-slice-upload
   ```
-  * 使用 yarn 安装
+  * Use yarn install
   ```shell
   yarn add file-slice-upload
   ```
-### 2. 使用 file-slice-upload 上传文件碎片
+
+2. Use file-slice-upload upload file's chunk
+
 ```tsx
 import fileUpload from 'file-slice-upload'
 fileUpload()
 .file(youFile, '1MB')
 .uploadFunc(async(chunk)=>{
   const success = await postChunkFile(chunk)
-  return success   /* 返回 true 将会上传下一个文件碎片 */
+  return success   /* return true will upload next chunk */
 })
 .start()
 ```
-
-## 🔥🔥🔥 特点
-1. 轻松控制上传流程, 让你只需专注上传逻辑!
-2. 友好、易读的 api `.start()` `.stop()` `.continue()`...
-3. 支持事件 `start` `finish` `stop` `progress` `error`...
-4. 轻量
-5. 不依赖任何第三方库
-6. 使用 typescript 编码, 代码提示良好
-
-
-## API文档
-
-#### 默认导出
-工厂函数，返回`fileUpload` 实例
-| 参数   | 类型            | 必传  | 说明           |
-| ------ | --------------- | ----- | ---------------- |
-| 并发数 | number - (0, 8] | false | 每轮发送n个文件碎片 |
-
-
-#### fileUpload类
-1. `fileUpload.file(file, chunkSize, chunkName?)` => `this`
-
-| 参数名   | 类型            | 必传  | 说明 |
-| ------ | --------------- | ----- | ---------------- |
-| file | File | true | 分片上传的文件 |
-| chunkSize | String | true | 文件碎片大小，传入`'200KB'` `'1MB'` `'2M'` 等格式的字符串 |
-| chunkName | (file: 文件, index: 碎片序列) => 文件碎片的名称 | false | 传入函数，该函数返回的字符串作为文件碎片的name属性值 |
-
-2.  `fileUpload.uploadFunc(ajax)`  => `this`
-
-| 参数名   | 类型            | 必传  | 说明 |
-| ------ | --------------- | ----- | ---------------- |
-| ajax | (chunk: File \| File[], index: number, chunks: File[] \| File[][]) => boolean | true | 上传文件碎片的函数，返回true就上传下一个碎片|
-
-3.  `fileUpload.start()`  => `this`
-开始上传
-4.  `fileUpload.stop()`  => `this`
-暂停上传
-5.  `fileUpload.continue()`  => `this`
-继续上传
-
-5.  `fileUpload.on(eventName, cb)`  => `this` 监听上传事件
-
-| eventName   | 说明            | cb函数类型
-| ------ | --------------- | ----- |
-| start | 开始上传 | `() => void` |
-| finish | 上传完成 | `() => void`|
-| continue | 继续上传 | `() => void` |
-| progress | 上传进度 | `({done: number, all: number}) => void` |
-| chunk-uploaded | 分片上传成功 |`({chunk: File, index: number, chunks: File[] }) => void `|
-| error | 上传失败 | `() => void` |
-
-6. `fileUpload.off(eventName, cb)` => `this` 取消事件注册
-
 ### demo
 
 1. [live-demo](https://zhao-huo-long.github.io/file-slice-upload/demo/demo.html)
+
+
+## Feature
+1. Easy to control the upload flow, help you focus on upload file logic !
+2. Friendly api `.start()` `.stop()` `.continue()`...
+3. More event `start` `finish` `stop` `progress` `error`...
+4. Tiny
+5. Don't depend on any 3-th lib
+6. Use Typescript code
+
+
+## API document
+
+#### export default
+factory function，return the `fileUpload` instance
+| param   | type            | require  | description           |
+| ------ | --------------- | ----- | ---------------- |
+| parallel | number - [1, 8] | false | every time send `n` file's chunks |
+
+
+#### fileUpload-class
+1. `fileUpload.file(file, chunkSize, chunkName?)` => `this`
+
+| param   | type            | require  | description |
+| ------ | --------------- | ----- | ---------------- |
+| file | File | true | the file's chunk |
+| chunkSize | String | true | chunk's size, for example: `'200KB'` `'1MB'` `'2M'` |
+| chunkName | (file: File, index: number) => string | false | return this chunk file's name |
+
+2.  `fileUpload.uploadFunc(ajax)`  => `this`
+
+| param   | type            | require  | description |
+| ------ | --------------- | ----- | ---------------- |
+| ajax | (chunk: File \| File[], index: number, chunks: File[] \| File[][]) => Promise\<any \| true\> | true | upload chunk function , return true will upload next chunk |
+
+3.  `fileUpload.start()`  => `this`
+start upload
+4.  `fileUpload.stop()`  => `this`
+suspend upload
+5.  `fileUpload.continue()`  => `this`
+continue upload
+
+5.  `fileUpload.on(eventName, cb)`  => `this`
+listen event
+
+| eventName   | description | callback function type
+| ------ | --------------- | ----- |
+| start | start upload | `() => void` |
+| finish | suspend upload | `() => void`|
+| continue | continue upload | `() => void` |
+| progress | upload progress | `({done: number, all: number}) => void` |
+| chunk-uploaded | chunk uploaded  |`({chunk: File, index: number, chunks: File[] }) => void `|
+| error | upload fail | `() => void` |
+
+6. `fileUpload.off(eventName, cb)` => `this`
+ close listen event
