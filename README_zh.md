@@ -24,6 +24,10 @@ fileUpload()
 })
 .start()
 ```
+### demo
+
+1. [live-demo](https://zhao-huo-long.github.io/file-slice-upload/demo/demo.html)
+
 
 ## 🔥🔥🔥 特点
 1. 轻松控制上传流程, 让你只需专注上传逻辑!

@@ -25,6 +25,10 @@ fileUpload()
 })
 .start()
 ```
+### demo
+
+1. [live-demo](https://zhao-huo-long.github.io/file-slice-upload/demo/demo.html)
+
 
 ## Feature
 1. Easy to control the upload flow, help you focus on upload file logic !

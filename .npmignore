@@ -1,5 +1,9 @@
-./demo
+demo
 
-./scripts
+scripts
 
-./yarn.lock
+yarn.lock
+
+github
+
+husky/
