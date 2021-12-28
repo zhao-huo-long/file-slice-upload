@@ -7,3 +7,13 @@ yarn.lock
 github
 
 husky/
+
+src/
+
+scripts/
+
+.editorconfig
+
+.eslint*
+
+webpack.config.js
