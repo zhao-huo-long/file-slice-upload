@@ -35,8 +35,7 @@ fileUpload()
 2. Friendly api `.start()` `.stop()` `.continue()`...
 3. More event `start` `finish` `stop` `progress` `error`...
 4. Tiny
-5. Don't depend on any 3-th lib
-6. Use Typescript code
+5. Use Typescript code
 
 
 ## API document

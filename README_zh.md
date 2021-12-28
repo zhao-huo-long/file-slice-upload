@@ -34,8 +34,7 @@ fileUpload()
 2. 友好、易读的 api `.start()` `.stop()` `.continue()`...
 3. 支持事件 `start` `finish` `stop` `progress` `error`...
 4. 轻量
-5. 不依赖任何第三方库
-6. 使用 typescript 编码, 代码提示良好
+5. 使用 typescript 编码, 代码提示良好
 
 
 ## API文档
