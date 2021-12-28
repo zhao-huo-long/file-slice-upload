@@ -47,5 +47,8 @@
     "url": "https://github.com/zhao-huo-long/file-slice-upload/issues"
   },
   "homepage": "https://github.com/zhao-huo-long/file-slice-upload#readme",
-  "dependencies": {}
+  "dependencies": {
+    "assert-tiny": "^1.0.1",
+    "emitter-tiny": "^1.0.0"
+  }
 }

@@ -1,11 +1,13 @@
-import MiniEventEmit from './utils/miniEventEmit'
+// import MiniEventEmit from './utils/miniEventEmit'
 import type { UploadAjaxFunc } from './utils/flowCtr'
 import sliceFile from './utils/sliceFile'
 import type { Unit } from './utils/strToByte'
 import strToByte from './utils/strToByte'
 import flowCtr from './utils/flowCtr'
 import type { FlowCtr } from './utils/flowCtr'
-import { mAssertType } from './utils/miniAssert'
+import v from 'assert-tiny'
+import emitter from 'emitter-tiny'
+import type { Emitter } from 'emitter-tiny'
 
 type EventType = {
   start: () => void;
@@ -27,7 +29,7 @@ class FileUpload<T extends number>{
   /** chunks upload function */
   private uploadFunc_: UploadAjaxFunc<ChunkType<T>>
   /** event center */
-  private event: MiniEventEmit = new MiniEventEmit()
+  private event: Emitter = new emitter()
   /** flow */
   private flow: FlowCtr<ChunkType<T>>
   /** file */
@@ -37,22 +39,22 @@ class FileUpload<T extends number>{
 
   /** event listen */
   on<M extends keyof EventType>(eventName: M, handler: EventType[M]) {
-    mAssertType(handler, Function, 'handler expecte function type')
+    v(handler).isTypeOf(Function, 'handler expecte function type')
     this.event.on(eventName, handler)
     return this
   }
 
   /** event close listen */
   off<M extends keyof EventType>(eventName: M, handler: EventType[M]) {
-    mAssertType(handler, Function, 'handler expecte function type')
+    v(handler).isTypeOf(Function, 'handler expecte function type')
     this.event.off(eventName, handler)
     return this
   }
 
   /** set upload file */
   public file(file: File, chunkSizeStr: Unit,) {
-    mAssertType(file, File, 'file expecte File type')
-    mAssertType(chunkSizeStr, String, 'chunkSizeStr expecte String type likes `"2MB"`')
+    v(file).isTypeOf(File, 'file expecte File type')
+    v(chunkSizeStr).isTypeOf(String, 'chunkSizeStr expecte String type likes `"2MB"`')
     this.file_ = file
     const chunkSize = strToByte(chunkSizeStr)
     const chunkArr = sliceFile(file, chunkSize)
@@ -72,15 +74,15 @@ class FileUpload<T extends number>{
 
   /** set upload file-chunk function, function return true will upload next chunk */
   public uploadFunc(ajax: UploadAjaxFunc<ChunkType<T>>) {
-    mAssertType(ajax, Function, 'expecte Function')
+    v(ajax).isTypeOf(Function, 'expecte Function')
     this.uploadFunc_ = ajax
     return this
   }
 
   /** start upload */
   public start() {
-    mAssertType(this.uploadFunc_, Function, 'please set upload function use .uploadFunc()')
-    mAssertType(this.file_, File, 'please set upload file use .file(file)')
+    v(this.uploadFunc_).isTypeOf(Function, 'please set upload function use .uploadFunc()')
+    v(this.file_).isTypeOf(File, 'please set upload file use .file(file)')
     this.flow?.stop?.()
     this.event.emit('start', 'start')
     this.flow = flowCtr<ChunkType<T>>

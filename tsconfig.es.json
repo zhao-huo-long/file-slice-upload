@@ -6,6 +6,7 @@
     "allowJs": true,
     "declaration": true,
     "emitDeclarationOnly": false,
+    "moduleResolution": "Node",
     "outDir": "es",
     "charset": "utf-8",
     "esModuleInterop": true,

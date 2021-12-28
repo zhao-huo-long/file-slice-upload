@@ -1,8 +1,9 @@
 import MiniEventEmit from './miniEventEmit'
-
+import type { Emitter } from 'emitter-tiny'
+import emitter from 'emitter-tiny'
 export type UploadAjaxFunc<T> = (chunk: T, index: number, chunks: readonly T[]) => Promise<unknown>
 
-type flowCtr<T> = (ajax: UploadAjaxFunc<T>, chunks: T[], event: MiniEventEmit, start: number,) => {
+type flowCtr<T> = (ajax: UploadAjaxFunc<T>, chunks: T[], event: Emitter, start: number,) => {
   stop?: () => void
   continue?: () => ReturnType<flowCtr<T>>
 }
@@ -14,7 +15,7 @@ export type FlowCtr<T> = ReturnType<flowCtr<T>>
 function flowCtr<M>(
   uploadChunkAjax: UploadAjaxFunc<M>,
   chunks: M[] = [],
-  event: MiniEventEmit = new MiniEventEmit(),
+  event: Emitter = new emitter(),
   start = 0,
 ): ReturnType<flowCtr<M>> {
   const stopFlag = { val: false };
