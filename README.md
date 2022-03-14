@@ -69,13 +69,18 @@ suspend upload
 5.  `fileUpload.continue()`  => `this`
 continue upload
 
-5.  `fileUpload.on(eventName, cb)`  => `this`
+6.  `fileUpload.on(eventName, cb)`  => `this`
 listen event
+
+7.  `fileUpload.getFile()` => `file` get file
+
+8.  `fileUpload.getChunkSize()` => `number` get chunk size
+
 
 | eventName   | description | callback function type
 | ------ | --------------- | ----- |
 | start | start upload | `() => void` |
-| finish | suspend upload | `() => void`|
+| finish | suspend upload | `(chunks: File[]) => void`|
 | continue | continue upload | `() => void` |
 | progress | upload progress | `({done: number, all: number}) => void` |
 | chunk-uploaded | chunk uploaded  |`({chunk: File, index: number, chunks: File[] }) => void `|

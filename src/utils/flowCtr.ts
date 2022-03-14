@@ -1,4 +1,3 @@
-import MiniEventEmit from './miniEventEmit'
 import type { Emitter } from 'emitter-tiny'
 import emitter from 'emitter-tiny'
 export type UploadAjaxFunc<T> = (chunk: T, index: number, chunks: readonly T[]) => Promise<unknown>
@@ -38,14 +37,14 @@ function flowCtr<M>(
         continue
       }
       if (stopFlag.val === true) {
-        console.warn('stop')
         event.emit('stop', 'stop')
         break
       }
     }
     if (!copyChunks.length) {
-      console.warn('finish')
-      event.emit('finish', 'finish')
+      event.emit('finish', {
+        chunks,
+      })
     }
   })()
   return {

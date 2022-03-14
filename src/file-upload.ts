@@ -1,4 +1,3 @@
-// import MiniEventEmit from './utils/miniEventEmit'
 import type { UploadAjaxFunc } from './utils/flowCtr'
 import sliceFile from './utils/sliceFile'
 import type { Unit } from './utils/strToByte'
@@ -11,7 +10,7 @@ import type { Emitter } from 'emitter-tiny'
 
 type EventType = {
   start: () => void;
-  finish: () => void;
+  finish: (chunks: File[]) => void;
   continue: () => void;
   progress: (payload: { done: number, all: number }) => void;
   'chunk-uploaded': (payload: { chunk: File, index: number, chunks: File[] }) => void;
@@ -34,6 +33,8 @@ class FileUpload<T extends number>{
   private flow: FlowCtr<ChunkType<T>>
   /** file */
   private file_: File
+  /** chunkSize */
+  private chunkSize: number
 
   constructor(private readonly parallel: T = 1 as T) { }
 
@@ -57,6 +58,7 @@ class FileUpload<T extends number>{
     v(chunkSizeStr).isTypeOf(String, 'chunkSizeStr expecte String type likes `"2MB"`')
     this.file_ = file
     const chunkSize = strToByte(chunkSizeStr)
+    this.chunkSize = chunkSize
     const chunkArr = sliceFile(file, chunkSize)
     if ([0, 1, undefined].includes(this.parallel)) {
       this.chunkArr = chunkArr as PARALLEL<T>
@@ -104,6 +106,14 @@ class FileUpload<T extends number>{
     }
     this.event.emit('continue', 'continue')
     return this
+  }
+
+  public getFile(){
+    return this.file_
+  }
+
+  public getChunkSize(){
+    return this.chunkSize
   }
 
 }

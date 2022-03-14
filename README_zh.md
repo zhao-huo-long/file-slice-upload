@@ -68,12 +68,17 @@ fileUpload()
 5.  `fileUpload.continue()`  => `this`
 继续上传
 
-5.  `fileUpload.on(eventName, cb)`  => `this` 监听上传事件
+6.  `fileUpload.on(eventName, cb)`  => `this` 监听上传事件
+
+7.  `fileUpload.getFile()` => `file` 获取原始完整文件
+
+8.  `fileUpload.getChunkSize()` => `number` 分片大小
+
 
 | eventName   | 说明            | cb函数类型
 | ------ | --------------- | ----- |
 | start | 开始上传 | `() => void` |
-| finish | 上传完成 | `() => void`|
+| finish | 上传完成 | `(chunks: File[]) => void`|
 | continue | 继续上传 | `() => void` |
 | progress | 上传进度 | `({done: number, all: number}) => void` |
 | chunk-uploaded | 分片上传成功 |`({chunk: File, index: number, chunks: File[] }) => void `|
