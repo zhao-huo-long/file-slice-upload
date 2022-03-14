@@ -10,7 +10,7 @@ import type { Emitter } from 'emitter-tiny'
 
 type EventType = {
   start: () => void;
-  finish: (chunks: File[]) => void;
+  finish: (val: {chunks: File[], chunkSize: number}) => void;
   continue: () => void;
   progress: (payload: { done: number, all: number }) => void;
   'chunk-uploaded': (payload: { chunk: File, index: number, chunks: File[] }) => void;
@@ -40,22 +40,22 @@ class FileUpload<T extends number>{
 
   /** event listen */
   on<M extends keyof EventType>(eventName: M, handler: EventType[M]) {
-    v(handler).isTypeOf(Function, 'handler expecte function type')
+    v(handler).isTypeOf(Function, 'handler expect function type')
     this.event.on(eventName, handler)
     return this
   }
 
   /** event close listen */
   off<M extends keyof EventType>(eventName: M, handler: EventType[M]) {
-    v(handler).isTypeOf(Function, 'handler expecte function type')
+    v(handler).isTypeOf(Function, 'handler expect function type')
     this.event.off(eventName, handler)
     return this
   }
 
   /** set upload file */
   public file(file: File, chunkSizeStr: Unit,) {
-    v(file).isTypeOf(File, 'file expecte File type')
-    v(chunkSizeStr).isTypeOf(String, 'chunkSizeStr expecte String type likes `"2MB"`')
+    v(file).isTypeOf(File, 'file expect File type')
+    v(chunkSizeStr).isTypeOf(String, 'chunkSizeStr expect String type likes `"2MB"`')
     this.file_ = file
     const chunkSize = strToByte(chunkSizeStr)
     this.chunkSize = chunkSize
@@ -76,8 +76,8 @@ class FileUpload<T extends number>{
 
   /** set upload file-chunk function, function return true will upload next chunk */
   public uploadFunc(ajax: UploadAjaxFunc<ChunkType<T>>) {
-    v(ajax).isTypeOf(Function, 'expecte Function')
-    this.uploadFunc_ = ajax
+    v(ajax).isTypeOf(Function, 'expect Function')
+    this.uploadFunc_ = ajax.bind(this)
     return this
   }
 
@@ -88,7 +88,7 @@ class FileUpload<T extends number>{
     this.flow?.stop?.()
     this.event.emit('start', 'start')
     this.flow = flowCtr<ChunkType<T>>
-      (this.uploadFunc_, this.chunkArr, this.event, 0)
+      (this.uploadFunc_, this.chunkArr, this.event, 0, this.chunkSize)
     return this
   }
 

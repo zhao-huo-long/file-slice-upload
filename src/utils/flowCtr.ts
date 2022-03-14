@@ -1,6 +1,6 @@
 import type { Emitter } from 'emitter-tiny'
 import emitter from 'emitter-tiny'
-export type UploadAjaxFunc<T> = (chunk: T, index: number, chunks: readonly T[]) => Promise<unknown>
+export type UploadAjaxFunc<T> = (chunk: T, index: number, chunks: readonly T[], chunkSize: number) => Promise<unknown>
 
 type flowCtr<T> = (ajax: UploadAjaxFunc<T>, chunks: T[], event: Emitter, start: number,) => {
   stop?: () => void
@@ -16,6 +16,7 @@ function flowCtr<M>(
   chunks: M[] = [],
   event: Emitter = new emitter(),
   start = 0,
+  chunkSize: number
 ): ReturnType<flowCtr<M>> {
   const stopFlag = { val: false };
   const copyChunks: M[] = chunks.slice(start);
@@ -24,7 +25,7 @@ function flowCtr<M>(
   (async function () {
     while (copyChunks.length) {
       const chunk = copyChunks.shift()
-      const res = await uploadChunkAjax(chunk, i, chunks)
+      const res = await uploadChunkAjax(chunk, i, chunks, chunkSize)
       if (res !== true) {
         event.emit('error', 'error')
         console.error('error')
@@ -42,9 +43,7 @@ function flowCtr<M>(
       }
     }
     if (!copyChunks.length) {
-      event.emit('finish', {
-        chunks,
-      })
+      event.emit('finish', {chunks, chunkSize})
     }
   })()
   return {
@@ -53,7 +52,7 @@ function flowCtr<M>(
     },
     continue: () => {
       stopFlag.val = true
-      return flowCtr<M>(uploadChunkAjax, chunks, event, i)
+      return flowCtr<M>(uploadChunkAjax, chunks, event, i, chunkSize)
     }
   }
 
