@@ -17,7 +17,7 @@ const md5 = (file: File, chunkSize: number, event = new emmiter()) => {
           if (cancel) return res(false)
           const content = e.target.result as ArrayBuffer
           computer.append(content)
-          event.emit('progress', { done: ++i, all: chunkNums, type: 'md5' })
+          event.emit('progress', { done: ++i, all: chunkNums, type: 'md5', file })
           if (i < chunkNums) {
             reader.readAsArrayBuffer(getChunk(i))
           } else {

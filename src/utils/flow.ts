@@ -31,7 +31,7 @@ const createFlow = (
           return
         }
         sendIndex++
-        event.emit('progress', { done: sendIndex, all: chunkNums, type: 'upload' })
+        event.emit('progress', { file, done: sendIndex, all: chunkNums, type: 'upload' })
       }
       event.emit('finish', { file, md5, all: chunkNums, chunkSize })
     },
