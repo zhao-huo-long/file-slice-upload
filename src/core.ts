@@ -44,7 +44,8 @@ class FileSliceUpload {
       file,
       ajax,
       chunkSize,
-      event } = this
+      event
+    } = this
     const { startCompute, cancelCompute } = md5(file, chunkSize, event)
     const { start, cancel } = createFlow(file, chunkSize, ajax, event)
     this.cancelUpload = () => {
@@ -58,11 +59,12 @@ class FileSliceUpload {
 
   cancel = () => {
     const {
-      cancelUpload = () => {},
+      cancelUpload,
       event,
       file,
-      chunkSize } = this
-    cancelUpload()
+      chunkSize
+    } = this
+    cancelUpload?.()
     event.emit('cancel', { file, chunkSize })
   }
 }
