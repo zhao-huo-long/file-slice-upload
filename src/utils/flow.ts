@@ -1,9 +1,14 @@
-import fileHandler from './getFileChunk'
+import fileHandler from './fileHandler'
 import emmiter from 'emitter-tiny'
 export type IAjax = (chunk: File, index: number, all: number) => Promise<boolean | void>
 
-const createFlow = (file: File, chunkSize: number, ajax: IAjax, event = new emmiter()) => {
-  const { getChunk, chunkNums } = fileHandler(file, chunkSize)
+const createFlow = (
+  file: File,
+  chunkSize: number,
+  ajax: IAjax,
+  event = new emmiter()
+) => {
+  const { getChunk, chunkNums } = fileHandler(file, chunkSize, false)
   let sendIndex = 0
   let cancel = false
   return {
@@ -12,7 +17,7 @@ const createFlow = (file: File, chunkSize: number, ajax: IAjax, event = new emmi
       while (sendIndex < chunkNums) {
         const chunk = getChunk(sendIndex)
         if (!chunk.size) return
-        const next = await ajax(chunk, sendIndex, chunkNums)
+        const next = await ajax(chunk as File, sendIndex, chunkNums)
         if (!next) return event.emit('error', { chunk, file, index: sendIndex })
         event.emit('chunk-uploaded', { chunk, file, index: sendIndex })
         if (cancel) {
@@ -29,6 +34,5 @@ const createFlow = (file: File, chunkSize: number, ajax: IAjax, event = new emmi
     }
   }
 }
-
 
 export default createFlow

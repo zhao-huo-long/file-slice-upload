@@ -3,6 +3,7 @@ import type { IAjax } from './utils/flow'
 import type { EventKey, EventType } from './utils/event'
 import v from 'assert-tiny'
 import emitter from 'emitter-tiny'
+import md5 from './utils/compute-md5'
 
 
 class FileSliceUpload {
@@ -11,7 +12,7 @@ class FileSliceUpload {
   private cancelUpload: () => void
   private event = new emitter()
 
-  constructor(private chunkSize: number){}
+  constructor(private chunkSize: number) { }
 
   on = <M extends EventKey>(eventName: M, handler: EventType[M]) => {
     v(handler).isTypeOf(Function, 'handler expect function type')
@@ -38,17 +39,31 @@ class FileSliceUpload {
     return this
   }
 
-  start = () => {
-    const { file, ajax, chunkSize, event } = this
+  start = async () => {
+    const {
+      file,
+      ajax,
+      chunkSize,
+      event } = this
+    const { startCompute, cancelCompute } = md5(file, chunkSize, event)
     const { start, cancel } = createFlow(file, chunkSize, ajax, event)
-    this.cancelUpload = cancel
-    start()
+    this.cancelUpload = () => {
+      cancelCompute()
+      cancel()
+    }
     event.emit('start', { file, chunkSize })
-    return this
+    const next = await startCompute()
+    if(next) {
+      start()
+    }
   }
 
   cancel = () => {
-    const { cancelUpload = () => {}, event, file, chunkSize } = this
+    const {
+      cancelUpload = () => {},
+      event,
+      file,
+      chunkSize } = this
     cancelUpload()
     event.emit('cancel', { file, chunkSize })
   }
