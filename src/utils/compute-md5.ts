@@ -4,7 +4,7 @@ import emmiter from 'emitter-tiny'
 
 
 const md5 = (file: File, chunkSize: number, event = new emmiter()) => {
-  const computer = new SparkMD5();
+  const computer = new SparkMD5.ArrayBuffer();
   const { getChunk, chunkNums } = fileHandler(file, chunkSize, true)
   let cancel = false
   return {
@@ -15,7 +15,7 @@ const md5 = (file: File, chunkSize: number, event = new emmiter()) => {
         let i = 0
         reader.onload = (e) => {
           if (cancel) return res(false)
-          const content = e.target.result as string
+          const content = e.target.result as ArrayBuffer
           computer.append(content)
           event.emit('progress', { done: ++i, all: chunkNums, type: 'md5' })
           if (i < chunkNums) {
