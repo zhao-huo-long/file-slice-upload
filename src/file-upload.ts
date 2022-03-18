@@ -84,7 +84,7 @@ class FileUpload<T extends number>{
   /** start upload */
   public start() {
     v(this.uploadFunc_).isTypeOf(Function, 'please set upload function use .uploadFunc()')
-    v(this.file_).isTypeOf(File, 'please set upload file use .file(file)')
+    v(this.file_).isTypeOf(File, 'please set upload file use')
     this.flow?.stop?.()
     this.event.emit('start', 'start')
     this.flow = flowCtr<ChunkType<T>>

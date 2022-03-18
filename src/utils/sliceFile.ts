@@ -21,4 +21,24 @@ const sliceFile = (file: File, chunkSize = 0, chunkName?: BuildNameFunt): File[]
   return chunksArray
 }
 
+export type IteratorFile = File & {
+  [Symbol.iterator]: () => File
+}
+
+export const iteraotrFile = (file: File, chunkSize = 0, chunkName?: BuildNameFunt) : IteratorFile =>  {
+  const chunkNums = Math.ceil(file.size / chunkSize)
+  let i = 0
+  file[Symbol.iterator] = function*() {
+    while(i < chunkNums){
+      const chunkBlob = this.slice(i * chunkSize, i * chunkSize + chunkSize)
+      const chunkFileName = chunkName ? chunkName(this, i) : buildChunkName(file, i)
+      i++
+      yield new File([chunkBlob], chunkFileName, {
+        type: this.type
+      })
+    }
+  }
+  return file as IteratorFile
+}
+
 export default sliceFile

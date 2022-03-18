@@ -28,7 +28,6 @@ function flowCtr<M>(
       const res = await uploadChunkAjax(chunk, i, chunks, chunkSize)
       if (res !== true) {
         event.emit('error', 'error')
-        console.error('error')
         break
       }
       if (res === true && stopFlag.val === false) {
