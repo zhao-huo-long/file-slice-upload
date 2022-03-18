@@ -12,7 +12,7 @@ class FileSliceUpload {
   private cancelUpload: () => void
   private event = new emitter()
 
-  constructor(private chunkSize: number) { }
+  constructor(private chunkSize: number = 1024 * 1024) { }
 
   on = <M extends EventKey>(eventName: M, handler: EventType[M]) => {
     v(handler).isTypeOf(Function, 'handler expect function type')
@@ -52,10 +52,8 @@ class FileSliceUpload {
       cancel()
     }
     event.emit('start', { file, chunkSize })
-    const next = await startCompute()
-    if(next) {
-      start()
-    }
+    const md5Str = await startCompute()
+    if(typeof md5Str === 'string') start(md5Str)
   }
 
   cancel = () => {

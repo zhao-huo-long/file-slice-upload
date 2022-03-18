@@ -9,7 +9,7 @@ const md5 = (file: File, chunkSize: number, event = new emmiter()) => {
   let cancel = false
   return {
     startCompute: async () => {
-      return new Promise<boolean>((res) => {
+      return new Promise<boolean | string>((res) => {
         cancel = false
         const reader = new FileReader()
         let i = 0
@@ -17,11 +17,11 @@ const md5 = (file: File, chunkSize: number, event = new emmiter()) => {
           if (cancel) return res(false)
           const content = e.target.result as string
           computer.append(content)
-          event.emit('progress', { done: i + 1, all: chunkNums, type: 'md5' })
+          event.emit('progress', { done: ++i, all: chunkNums, type: 'md5' })
           if (i < chunkNums) {
-            reader.readAsArrayBuffer(getChunk(i++))
+            reader.readAsArrayBuffer(getChunk(i))
           } else {
-            res(true)
+            res(computer.end())
           }
         }
         reader.readAsArrayBuffer(getChunk(i))
