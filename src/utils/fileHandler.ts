@@ -10,7 +10,7 @@ const fileHandler = (file: File, chunkSize: number, isBlob = false, chunkName?: 
     getChunk: (index: number): isBlob<typeof isBlob>  => {
       const chunkBlob = file.slice(index * chunkSize, (index + 1) * chunkSize)
       if(isBlob) return chunkBlob
-      const chunkFileName = chunkName && buildChunkName
+      const chunkFileName = chunkName || buildChunkName
       return new File([chunkBlob], chunkFileName(file, index), {
         type: file.type
       })
