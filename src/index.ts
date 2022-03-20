@@ -1,7 +1,5 @@
-import FileUpload from './file-upload'
+import FileSliceUpload from './core'
 
-export { default as fileUpload } from './file-upload'
+export { default as FileSliceUpload } from './core'
 
-export default function factory <T extends number>(parallel: T = 1 as T){
-  return new FileUpload(parallel)
-}
+export default (chunkSize: number) => new FileSliceUpload(chunkSize)

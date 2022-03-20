@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,12 +8,12 @@
   <title>file-slice-upload-demo</title>
   <script src="../scripts/file-slice-upload.js"></script>
 </head>
+
 <body>
   <div id="demo">
     <input id="fileBox" type="file">
     <button id="uploadBtn">UPLOAD</button>
-    <button id="stopBtn">STOP</button>
-    <button id="conBtn">CONTINUE</button>
+    <button id="stopBtn">CANCEL</button>
     <span>chunk-size: 1M</span>
     <div id="content"></div>
   </div>
@@ -23,38 +24,59 @@
   const content = document.querySelector("#content")
   const stopBtn = document.querySelector("#stopBtn")
   const conBtn = document.querySelector("#conBtn")
-  function mockPostFile(file){
-    return new Promise(function(res){
-      setTimeout(function(){
-          res(file)
-      }, 1000)
+  async function mockPostFile({ chunk, file, md5, all }) {
+    const form = new FormData()
+    form.append('chunkFile', chunk)
+    form.append('hash', md5)
+    form.append('all', all)
+    const resBody = await fetch('http://120.25.173.175:9876/sendChunkFile', {
+      method: 'post',
+      mode: 'cors',
+      body: form
     })
+    const data = await resBody.json()
+    return data.success
   }
-  function uploadChunkFunc(chunk){
+  function uploadChunkFunc(chunk) {
+    console.log(chunk)
     return mockPostFile(chunk).then(res => !!res)
   }
-  const fileupload = fileSliceUpload()
-  .uploadFunc(uploadChunkFunc)
-  .on('finish', (e) => {
-    alert('all chunks upload finish')
-  })
-  .on('chunk-uploaded', ({chunk}) => {
-    console.log(chunk)
-    const d = document.createElement('div')
-    d.innerHTML = `chunk-file-name:${chunk.name}`
-    content.appendChild( d )
-  })
-  uploadBtn.addEventListener('click', function(){
+  const fileupload = fileSliceUpload(1024 * 1024)
+    .setAjax(uploadChunkFunc)
+    .on('progress', ({all, done, type, file}) => {
+      if(type === 'md5'){
+        const d = document.createElement('div')
+        d.innerHTML = `<div>[md5]-${file.name}:${Math.ceil(100* done / all)}%</div>`
+        content.appendChild(d)
+      }
+      if(type === 'upload'){
+        const d = document.createElement('div')
+        d.innerHTML = `<div>[upload]-${file.name}:${Math.ceil(100* done / all)}%</div>`
+        content.appendChild(d)
+      }
+    })
+    .on('finish', async ({ chunks, file, all, md5 }) => {
+      const form = new FormData()
+      form.append('hash', md5)
+      form.append('fileName', file.name)
+      form.append('all', all)
+      const resBody = await fetch('http://120.25.173.175:9876/mergeChunkFile', {
+        method: 'post',
+        mode: 'cors',
+        body: form
+      })
+      const data = await resBody.json()
+      window.open('http://120.25.173.175:9876/getFile/' + data.fileName)
+    })
+  uploadBtn.addEventListener('click', function () {
     const [file] = fileBox.files
-    console.log(file)
-    fileupload.file(file, '1M').
-    start()
+    fileupload
+      .setFile(file)
+      .start()
   })
-  stopBtn.addEventListener('click', function(){
-    fileupload.stop()
-  })
-  conBtn.addEventListener('click', function(){
-    fileupload.continue()
+  stopBtn.addEventListener('click', function () {
+    fileupload.cancel()
   })
 </script>
+
 </html>
