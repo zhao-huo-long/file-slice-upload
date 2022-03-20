@@ -26,7 +26,7 @@ fileUpload(1024 * 1024)
 ```
 ### demo
 
-1. [live-demo-无服务端版本](https://zhao-huo-long.github.io/file-slice-upload/demo/demo.html)
+1. [live-demo](https://zhao-huo-long.github.io/file-slice-upload/demo/demo.html)
 
 2. [live-demo-有服务端版本]
 
