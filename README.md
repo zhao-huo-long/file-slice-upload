@@ -28,8 +28,6 @@ fileUpload(1024 * 1024)
 
 1. [live-demo](https://zhao-huo-long.github.io/file-slice-upload/demo/demo.html)
 
-2. [live-demo-有服务端版本]
-
 ## 🔥🔥🔥 特点
 1. 只需专注上传逻辑!
 2. 友好、易读的 api `.start()` `.cancel()`
