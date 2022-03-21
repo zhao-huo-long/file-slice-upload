@@ -24,9 +24,10 @@ fileUpload(1024 * 1024)
 })
 .start()
 ```
-### demo
+### 在线demo
 
-1. [live-demo](https://zhao-huo-long.github.io/file-slice-upload/demo/demo.html)
+1. [live-demo-原生](https://zhao-huo-long.github.io/file-slice-upload/demo/demo.html)
+2. [live-demo-react](http://120.25.173.175/file-slice-upload-client/dist/index.html)
 
 ## 🔥🔥🔥 特点
 1. 只需专注上传逻辑!
