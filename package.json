@@ -1,7 +1,7 @@
 {
   "name": "file-slice-upload",
   "description": "file-slice-upload",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "main": "lib/index.js",
   "types": "es/index.d.ts",
   "module": "es/index.js",
@@ -51,6 +51,7 @@
   "dependencies": {
     "assert-tiny": "^1.0.1",
     "emitter-tiny": "^1.0.0",
-    "spark-md5": "^3.0.2"
+    "spark-md5": "^3.0.2",
+    "tapable": "^2.2.1"
   }
 }
